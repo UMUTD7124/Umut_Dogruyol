@@ -1,0 +1,11 @@
+branca
+beautifulsoup4
+folium
+google
+matplotlib
+numpy
+pandas
+requests
+seaborn
+scikit-learn
+statsmodels

@@ -1,0 +1,2 @@
+Medium blog linki buraya eklenecek.
+Örnek: https://medium.com/@kullaniciadi/airbnb-price-prediction
