@@ -3,194 +3,423 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SQL Arena - Mini SQL Platformu</title>
+  <title>SQL Arena - SQL Öğrenme ve Pratik Platformu</title>
+  <meta name="description" content="SQL Arena ile SELECT, WHERE, GROUP BY, HAVING ve JOIN konularını oyunlaştırılmış şekilde öğrenin. Mobil uyumlu ücretsiz SQL pratik platformu." />
+
   <style>
-    * { box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { margin: 0; min-height: 100vh; background: linear-gradient(135deg,#0f172a,#1e293b); color: #e5e7eb; padding: 14px; }
-    .container { width: 100%; max-width: 1100px; margin: 0 auto; background: #111827; border-radius: 20px; padding: 22px; box-shadow: 0 20px 55px rgba(0,0,0,.38); }
-    h1 { margin: 0 0 8px; color: #38bdf8; text-align: center; font-size: 34px; }
-    .subtitle { text-align: center; color: #cbd5e1; margin-bottom: 20px; line-height: 1.5; }
-    .top-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
-    .badge { background: #1f2937; padding: 11px; border-radius: 12px; border: 1px solid #374151; text-align: center; font-size: 15px; }
-    .level-menu { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin-bottom: 16px; }
-    .level-btn { background: #334155; color: #e5e7eb; border: 1px solid #475569; padding: 12px 8px; border-radius: 12px; cursor: pointer; font-weight: bold; }
-    .level-btn.active { background: #38bdf8; color: #082f49; }
-    .box { background: #1f2937; border-radius: 16px; padding: 16px; margin-bottom: 14px; border: 1px solid #374151; }
-    .box-title { color: #facc15; font-weight: bold; margin-bottom: 8px; font-size: 17px; }
-    #questionText { font-size: 18px; line-height: 1.6; }
-    .schema { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-    .schema-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 12px; overflow-x: auto; }
-    .schema-card strong { color: #7dd3fc; }
-    .columns { margin-top: 8px; color: #cbd5e1; line-height: 1.7; font-family: Consolas, monospace; font-size: 14px; }
-    #tableArea { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; min-width: 620px; border-collapse: collapse; margin-top: 10px; background: #0f172a; border-radius: 12px; overflow: hidden; }
-    th,td { border: 1px solid #334155; padding: 9px; text-align: left; font-size: 14px; white-space: nowrap; }
-    th { background: #0369a1; color: white; }
-    textarea { width: 100%; min-height: 165px; background: #020617; color: #a7f3d0; border: 1px solid #475569; border-radius: 12px; padding: 14px; font-family: Consolas, monospace; font-size: 16px; resize: vertical; line-height: 1.5; }
-    .buttons { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 12px; }
-    button { border: none; padding: 14px 12px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 15px; min-height: 50px; }
-    button:active { transform: scale(.98); }
-    .check-btn { background: #22c55e; color: #052e16; }
-    .hint-btn { background: #facc15; color: #422006; }
-    .solution-btn { background: #a78bfa; color: #2e1065; }
-    .next-btn { background: #38bdf8; color: #082f49; }
-    .reset-btn { background: #fb7185; color: #4c0519; }
-    .result-box { min-height: 85px; line-height: 1.6; font-size: 16px; }
-    .success { color: #86efac; font-weight: bold; }
-    .error { color: #fca5a5; font-weight: bold; }
-    .hint { color: #fde68a; font-weight: bold; }
-    .info { color: #93c5fd; font-weight: bold; }
-    .solution { background: #020617; color: #93c5fd; padding: 12px; border-radius: 10px; margin-top: 10px; font-family: Consolas, monospace; white-space: pre-wrap; overflow-x: auto; }
-    .explanation { margin-top: 10px; color: #cbd5e1; background: #111827; padding: 12px; border-radius: 10px; border: 1px solid #334155; }
-    .footer-note { color: #94a3b8; text-align: center; font-size: 13px; line-height: 1.5; margin-top: 12px; }
-    @media(max-width:800px){ .top-bar{grid-template-columns:1fr 1fr;} .level-menu{grid-template-columns:1fr 1fr;} .schema{grid-template-columns:1fr;} .buttons{grid-template-columns:1fr 1fr;} }
-    @media(max-width:520px){ body{padding:8px;} .container{padding:14px;border-radius:14px;} h1{font-size:26px;} .subtitle{font-size:14px;} .top-bar,.level-menu,.buttons{grid-template-columns:1fr;} button{font-size:16px;min-height:54px;} textarea{min-height:170px;font-size:15px;} table{min-width:560px;} }
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #e5e7eb;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      background: #1f2937;
+      border: 1px solid #374151;
+      padding: 9px 12px;
+      border-radius: 12px;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      background: #334155;
+    }
+
+    .hero {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 24px;
+      padding: 34px;
+      margin-top: 14px;
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #0f766e;
+      color: #ccfbf1;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      margin-bottom: 14px;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 42px;
+      line-height: 1.15;
+      margin: 0 0 14px;
+      color: #f8fafc;
+    }
+
+    .lead {
+      color: #cbd5e1;
+      font-size: 18px;
+      margin-bottom: 22px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #38bdf8;
+      color: #082f49;
+    }
+
+    .btn-secondary {
+      background: #1f2937;
+      color: #e5e7eb;
+      border: 1px solid #475569;
+    }
+
+    .stats-card {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .stat {
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 15px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .stat strong {
+      color: #facc15;
+      font-size: 22px;
+      display: block;
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .section h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #f8fafc;
+    }
+
+    .section-desc {
+      color: #cbd5e1;
+      margin-bottom: 18px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 18px;
+      padding: 20px;
+      min-height: 190px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      color: #7dd3fc;
+      font-size: 21px;
+    }
+
+    .card p {
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+
+    .card a {
+      display: inline-block;
+      background: #334155;
+      color: #e5e7eb;
+      padding: 10px 13px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .ad-placeholder {
+      background: #020617;
+      border: 1px dashed #64748b;
+      color: #94a3b8;
+      text-align: center;
+      border-radius: 18px;
+      padding: 24px;
+      margin-top: 24px;
+      font-size: 14px;
+    }
+
+    .content-box {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 18px;
+      padding: 22px;
+      color: #cbd5e1;
+    }
+
+    .content-box h3 {
+      color: #facc15;
+      margin-top: 0;
+    }
+
+    footer {
+      margin-top: 34px;
+      border-top: 1px solid #334155;
+      padding: 22px 0;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .footer-links a {
+      color: #cbd5e1;
+    }
+
+    @media (max-width: 850px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        padding: 10px;
+      }
+
+      header {
+        align-items: flex-start;
+      }
+
+      nav {
+        width: 100%;
+      }
+
+      nav a {
+        flex: 1;
+        text-align: center;
+      }
+
+      .hero {
+        padding: 22px;
+        border-radius: 18px;
+      }
+
+      h1 {
+        font-size: 29px;
+      }
+
+      .lead {
+        font-size: 16px;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>SQL Arena</h1>
-    <p class="subtitle">HackerRank tarzı mini SQL öğrenme platformu. Seviye seç, sorgunu yaz, puan topla.</p>
-    <div class="top-bar">
-      <div class="badge">Soru: <span id="questionNumber">1</span> / <span id="totalQuestions"></span></div>
-      <div class="badge">Puan: <span id="score">0</span></div>
-      <div class="badge">Seviye: <span id="levelName">Temel</span></div>
-      <div class="badge">Konu: <span id="topic">SELECT</span></div>
-    </div>
-    <div class="level-menu" id="levelMenu"></div>
-    <div class="box"><div class="box-title">Görev</div><div id="questionText"></div></div>
-    <div class="box"><div class="box-title">Tablo Şeması</div><div class="schema" id="schemaArea"></div></div>
-    <div class="box"><div class="box-title">Örnek Veri</div><div id="tableArea"></div></div>
-    <div class="box">
-      <div class="box-title">SQL Cevabını Yaz</div>
-      <textarea id="userAnswer" placeholder="Örnek: SELECT isim FROM musteriler;"></textarea>
-      <div class="buttons">
-        <button class="check-btn" onclick="checkAnswer()">Kontrol Et</button>
-        <button class="hint-btn" onclick="showHint()">İpucu</button>
-        <button class="solution-btn" onclick="showSolution()">Çözüm</button>
-        <button class="next-btn" onclick="nextQuestion()">Sonraki</button>
+    <header>
+      <a href="index.html" class="logo">SQL Arena</a>
+      <nav>
+        <a href="index.html">Ana Sayfa</a>
+        <a href="oyun.html">SQL Oyunu</a>
+        <a href="select.html">Dersler</a>
+        <a href="iletisim.html">İletişim</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-grid">
+          <div>
+            <span class="tag">Ücretsiz SQL Pratik Platformu</span>
+            <h1>SQL öğrenmeyi oyun haline getir.</h1>
+            <p class="lead">
+              SELECT, WHERE, GROUP BY, HAVING ve JOIN konularını adım adım öğren.
+              Soruları çöz, puan topla ve SQL mantığını pratik yaparak geliştir.
+            </p>
+            <div class="hero-buttons">
+              <a href="oyun.html" class="btn btn-primary">Oyuna Başla</a>
+              <a href="select.html" class="btn btn-secondary">SQL Derslerine Git</a>
+            </div>
+          </div>
+
+          <div class="stats-card">
+            <div class="stat">
+              <strong>5+</strong>
+              SQL konusu
+            </div>
+            <div class="stat">
+              <strong>Mobil</strong>
+              telefonda rahat kullanım
+            </div>
+            <div class="stat">
+              <strong>Banka</strong>
+              gerçek hayata yakın örnekler
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="ad-placeholder">
+        Reklam alanı: AdSense onayı sonrası buraya reklam kodu eklenebilir.
       </div>
-      <div class="buttons"><button class="reset-btn" onclick="resetProgress()">Puanı Sıfırla</button></div>
-    </div>
-    <div class="box result-box" id="resultBox">Cevabını yazınca sonucu burada göreceksin.</div>
-    <div class="footer-note">Bu sürüm gerçek veritabanı çalıştırmaz; SQL yapısını akıllı anahtar kelime kontrolüyle değerlendirir. Sonraki sürümde gerçek SQLite motoru eklenebilir.</div>
+
+      <section class="section">
+        <h2>SQL Konuları</h2>
+        <p class="section-desc">Temelden başlayıp gerçek analiz sorgularına doğru ilerle.</p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>SELECT</h3>
+            <p>Tablodan kolon seçmeyi, tüm veriyi getirmeyi ve temel sorgu yapısını öğren.</p>
+            <a href="select.html">Dersi Aç</a>
+          </article>
+
+          <article class="card">
+            <h3>WHERE</h3>
+            <p>Verileri şartlara göre filtrele. Şehir, yaş, tutar ve metin filtrelerini öğren.</p>
+            <a href="where.html">Dersi Aç</a>
+          </article>
+
+          <article class="card">
+            <h3>GROUP BY</h3>
+            <p>Verileri gruplandır, COUNT ve SUM ile raporlama mantığını kavra.</p>
+            <a href="group-by.html">Dersi Aç</a>
+          </article>
+
+          <article class="card">
+            <h3>HAVING</h3>
+            <p>Gruplanmış sonuçları filtrele. WHERE ile HAVING farkını netleştir.</p>
+            <a href="having.html">Dersi Aç</a>
+          </article>
+
+          <article class="card">
+            <h3>JOIN</h3>
+            <p>Birden fazla tabloyu müşteri, hesap ve işlem örnekleriyle birleştir.</p>
+            <a href="join.html">Dersi Aç</a>
+          </article>
+
+          <article class="card">
+            <h3>Banka SQL</h3>
+            <p>Banka verilerine benzeyen örneklerle müşteri, hesap ve işlem analizleri yap.</p>
+            <a href="banka-sql.html">Dersi Aç</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Bu site kimler için?</h2>
+        <div class="content-box">
+          <h3>SQL öğrenmeye yeni başlayanlar için sade ve pratik yol</h3>
+          <p>
+            SQL Arena, SQL öğrenmek isteyen kişilere temel sorgu yapısını oyunlaştırılmış şekilde öğretmek için hazırlanmıştır.
+            Özellikle veri analizi, raporlama, banka operasyonları, müşteri analizi ve iş zekası alanlarına ilgi duyanlar için pratik örnekler içerir.
+          </p>
+          <p>
+            Site içindeki mini oyun, SQL sorgularının temel parçalarını kontrol eder. Amaç, kullanıcıların SELECT, FROM, WHERE,
+            GROUP BY, HAVING ve JOIN sıralamasını bol tekrar ile öğrenmesini sağlamaktır.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>© 2026 SQL Arena. Eğitim amaçlı hazırlanmıştır.</div>
+      <div class="footer-links">
+        <a href="gizlilik.html">Gizlilik Politikası</a>
+        <a href="kullanim-sartlari.html">Kullanım Şartları</a>
+        <a href="iletisim.html">İletişim</a>
+      </div>
+    </footer>
   </div>
-
-<script>
-const schemas = {
-  musteriler:["musteri_id","isim","sehir","yas","segment"],
-  hesaplar:["hesap_id","musteri_id","hesap_tipi","bakiye","acilis_tarihi"],
-  islemler:["islem_id","hesap_id","islem_tipi","tutar","kanal","islem_tarihi"],
-  kartlar:["kart_id","musteri_id","kart_tipi","limit_tutari","aktif_mi"],
-  krediler:["kredi_id","musteri_id","kredi_turu","kredi_tutari","durum"]
-};
-
-const sampleTables = {
-  musteriler:{columns:["musteri_id","isim","sehir","yas","segment"],rows:[[1,"Ali","İzmir",34,"Bireysel"],[2,"Ayşe","Ankara",28,"Premium"],[3,"Mehmet","İstanbul",41,"Bireysel"],[4,"Zeynep","İzmir",25,"Genç"]]},
-  hesaplar:{columns:["hesap_id","musteri_id","hesap_tipi","bakiye"],rows:[[101,1,"Vadesiz",3500],[102,1,"Vadeli",15000],[103,2,"Vadesiz",800],[104,3,"Vadesiz",12000]]},
-  islemler:{columns:["islem_id","hesap_id","islem_tipi","tutar","kanal"],rows:[[1001,101,"EFT",500,"Mobil"],[1002,101,"Havale",750,"Şube"],[1003,102,"Para Yatırma",3000,"ATM"],[1004,104,"EFT",1200,"İnternet"]]},
-  krediler:{columns:["kredi_id","musteri_id","kredi_turu","kredi_tutari","durum"],rows:[[501,1,"İhtiyaç",50000,"Aktif"],[502,2,"Konut",900000,"Aktif"],[503,3,"Taşıt",300000,"Kapalı"]]}
-};
-
-const levels = [
-  {id:"temel",name:"Temel"},
-  {id:"agregasyon",name:"Agregasyon"},
-  {id:"join",name:"JOIN"},
-  {id:"ileri",name:"İleri"},
-  {id:"banka",name:"Banka"}
-];
-
-const questions = [
-  {level:"temel",topic:"SELECT",tables:["musteriler"],question:"musteriler tablosundaki tüm kolonları getir.",must:["select","*","from","musteriler"],no:[],hint:"Tüm kolonları almak için SELECT * kullanılır.",solution:"SELECT *\nFROM musteriler;",explain:"SELECT veriyi seçer, FROM ise hangi tablodan veri alınacağını belirtir."},
-  {level:"temel",topic:"SELECT",tables:["musteriler"],question:"Sadece müşteri isimlerini ve şehirlerini getir.",must:["select","isim","sehir","from","musteriler"],no:["*"],hint:"SELECT sonrasında kolon adlarını virgülle ayır.",solution:"SELECT isim, sehir\nFROM musteriler;",explain:"Gereken kolonları seçmek daha temiz sorgu yazmanı sağlar."},
-  {level:"temel",topic:"WHERE",tables:["musteriler"],question:"İzmir şehrindeki müşterileri getir.",must:["select","from","musteriler","where","sehir","izmir"],no:[],hint:"Metin filtrelerinde WHERE sehir = 'İzmir' yapısı kullanılır.",solution:"SELECT *\nFROM musteriler\nWHERE sehir = 'İzmir';",explain:"WHERE satırları filtreler."},
-  {level:"temel",topic:"WHERE",tables:["musteriler"],question:"Yaşı 30'dan büyük müşterileri getir.",must:["select","from","musteriler","where","yas",">","30"],no:[],hint:"Sayısal değerlerde tırnak kullanmana gerek yok.",solution:"SELECT *\nFROM musteriler\nWHERE yas > 30;",explain:"Karşılaştırma operatörleri: >, <, >=, <=, =, <>."},
-  {level:"temel",topic:"ORDER BY",tables:["musteriler"],question:"Müşterileri yaşa göre büyükten küçüğe sırala.",must:["select","from","musteriler","order","by","yas","desc"],no:[],hint:"Büyükten küçüğe sıralamak için DESC kullanılır.",solution:"SELECT *\nFROM musteriler\nORDER BY yas DESC;",explain:"ORDER BY sonuçları sıralar. DESC azalan sıralamadır."},
-  {level:"temel",topic:"DISTINCT",tables:["musteriler"],question:"Müşterilerin bulunduğu farklı şehirleri getir.",must:["select","distinct","sehir","from","musteriler"],no:[],hint:"Tekrarsız değerler için DISTINCT kullanılır.",solution:"SELECT DISTINCT sehir\nFROM musteriler;",explain:"DISTINCT tekrar eden değerleri tekilleştirir."},
-
-  {level:"agregasyon",topic:"COUNT",tables:["musteriler"],question:"Toplam müşteri sayısını bul.",must:["select","count","from","musteriler"],no:[],hint:"Kayıt saymak için COUNT(*) kullanılır.",solution:"SELECT COUNT(*) AS musteri_sayisi\nFROM musteriler;",explain:"COUNT(*) satır sayısını verir."},
-  {level:"agregasyon",topic:"GROUP BY",tables:["musteriler"],question:"Her şehirde kaç müşteri olduğunu bul.",must:["select","sehir","count","from","musteriler","group","by","sehir"],no:[],hint:"Şehir bazında saymak için GROUP BY sehir gerekir.",solution:"SELECT sehir, COUNT(*) AS musteri_sayisi\nFROM musteriler\nGROUP BY sehir;",explain:"GROUP BY aynı değere sahip satırları gruplar."},
-  {level:"agregasyon",topic:"SUM",tables:["hesaplar"],question:"Tüm hesapların toplam bakiyesini bul.",must:["select","sum","bakiye","from","hesaplar"],no:[],hint:"Toplama işlemi için SUM(bakiye) kullan.",solution:"SELECT SUM(bakiye) AS toplam_bakiye\nFROM hesaplar;",explain:"SUM sayısal kolonların toplamını hesaplar."},
-  {level:"agregasyon",topic:"GROUP BY",tables:["hesaplar"],question:"Her hesap tipinin toplam bakiyesini bul.",must:["select","hesap_tipi","sum","bakiye","from","hesaplar","group","by","hesap_tipi"],no:[],hint:"Hesap tipine göre gruplayıp bakiye toplamını al.",solution:"SELECT hesap_tipi, SUM(bakiye) AS toplam_bakiye\nFROM hesaplar\nGROUP BY hesap_tipi;",explain:"Ürün tipi bazında toplam bakiye bankacılıkta sık raporlanır."},
-  {level:"agregasyon",topic:"HAVING",tables:["musteriler"],question:"Müşteri sayısı 1'den fazla olan şehirleri getir.",must:["select","sehir","count","from","musteriler","group","by","sehir","having",">","1"],no:[],hint:"Gruplanmış sonuçları filtrelemek için HAVING kullanılır.",solution:"SELECT sehir, COUNT(*) AS musteri_sayisi\nFROM musteriler\nGROUP BY sehir\nHAVING COUNT(*) > 1;",explain:"WHERE satır bazında, HAVING grup bazında filtreleme yapar."},
-
-  {level:"join",topic:"INNER JOIN",tables:["musteriler","hesaplar"],question:"Müşteri isimleriyle birlikte hesap tiplerini getir.",must:["select","isim","hesap_tipi","from","musteriler","join","hesaplar","on","musteri_id"],no:[],hint:"musteriler.musteri_id = hesaplar.musteri_id üzerinden JOIN yap.",solution:"SELECT m.isim, h.hesap_tipi\nFROM musteriler m\nINNER JOIN hesaplar h\nON m.musteri_id = h.musteri_id;",explain:"JOIN iki tabloyu ortak kolon üzerinden birleştirir."},
-  {level:"join",topic:"INNER JOIN",tables:["hesaplar","islemler"],question:"Her işlemin hesap tipi ve işlem tutarını getir.",must:["select","hesap_tipi","tutar","from","hesaplar","join","islemler","on","hesap_id"],no:[],hint:"hesaplar ile islemler hesap_id üzerinden bağlanır.",solution:"SELECT h.hesap_tipi, i.tutar\nFROM hesaplar h\nINNER JOIN islemler i\nON h.hesap_id = i.hesap_id;",explain:"İşlem tablosunda müşteri adı yoksa önce hesap tablosuna bağlanmak gerekir."},
-  {level:"join",topic:"LEFT JOIN",tables:["musteriler","hesaplar"],question:"Hesabı olsun veya olmasın tüm müşterileri ve varsa hesap tiplerini getir.",must:["select","isim","hesap_tipi","from","musteriler","left","join","hesaplar","on","musteri_id"],no:[],hint:"Tüm müşteriler gelsin istiyorsan LEFT JOIN kullan.",solution:"SELECT m.isim, h.hesap_tipi\nFROM musteriler m\nLEFT JOIN hesaplar h\nON m.musteri_id = h.musteri_id;",explain:"LEFT JOIN sol tablodaki tüm kayıtları getirir."},
-  {level:"join",topic:"JOIN + GROUP BY",tables:["musteriler","hesaplar"],question:"Her müşterinin toplam bakiyesini getir.",must:["select","isim","sum","bakiye","from","musteriler","join","hesaplar","on","musteri_id","group","by"],no:[],hint:"Müşteri ile hesapları birleştir, sonra müşteri bazında SUM(bakiye) al.",solution:"SELECT m.isim, SUM(h.bakiye) AS toplam_bakiye\nFROM musteriler m\nINNER JOIN hesaplar h\nON m.musteri_id = h.musteri_id\nGROUP BY m.isim;",explain:"Müşteri 360 raporlarında sık kullanılır."},
-  {level:"join",topic:"JOIN + WHERE",tables:["musteriler","krediler"],question:"Aktif kredisi olan müşterilerin isimlerini ve kredi tutarlarını getir.",must:["select","isim","kredi_tutari","from","musteriler","join","krediler","on","musteri_id","where","durum","aktif"],no:[],hint:"Önce JOIN, sonra WHERE durum = 'Aktif'.",solution:"SELECT m.isim, k.kredi_tutari\nFROM musteriler m\nINNER JOIN krediler k\nON m.musteri_id = k.musteri_id\nWHERE k.durum = 'Aktif';",explain:"JOIN sonrası WHERE ile aktif kredi kayıtları seçilir."},
-
-  {level:"ileri",topic:"CASE",tables:["hesaplar"],question:"Bakiyesi 10000 ve üzeri olan hesapları 'Yüksek', diğerlerini 'Normal' olarak sınıflandır.",must:["select","case","when","bakiye",">=","10000","then","yuksek","else","normal","end","from","hesaplar"],no:[],hint:"CASE WHEN bakiye >= 10000 THEN 'Yüksek' ELSE 'Normal' END kullan.",solution:"SELECT hesap_id, bakiye,\nCASE\n  WHEN bakiye >= 10000 THEN 'Yüksek'\n  ELSE 'Normal'\nEND AS bakiye_segmenti\nFROM hesaplar;",explain:"CASE SQL içinde koşullu sınıflandırma yapmanı sağlar."},
-  {level:"ileri",topic:"NULL",tables:["musteriler","hesaplar"],question:"Hiç hesabı olmayan müşterileri bul.",must:["select","from","musteriler","left","join","hesaplar","on","musteri_id","where","is","null"],no:[],hint:"LEFT JOIN sonrası h.hesap_id IS NULL kullanılır.",solution:"SELECT m.*\nFROM musteriler m\nLEFT JOIN hesaplar h\nON m.musteri_id = h.musteri_id\nWHERE h.hesap_id IS NULL;",explain:"Eşleşmeyen kayıtları bulmak için LEFT JOIN + IS NULL önemlidir."},
-  {level:"ileri",topic:"SUBQUERY",tables:["hesaplar"],question:"Ortalama bakiyeden yüksek bakiyeye sahip hesapları getir.",must:["select","from","hesaplar","where","bakiye",">","select","avg","bakiye","from","hesaplar"],no:[],hint:"WHERE bakiye > (SELECT AVG(bakiye) FROM hesaplar).",solution:"SELECT *\nFROM hesaplar\nWHERE bakiye > (SELECT AVG(bakiye) FROM hesaplar);",explain:"Alt sorgu, ana sorguya karşılaştırma değeri üretir."},
-  {level:"ileri",topic:"LIKE",tables:["musteriler"],question:"İsmi A harfi ile başlayan müşterileri getir.",must:["select","from","musteriler","where","isim","like","a%"],no:[],hint:"LIKE 'A%' A ile başlayanları bulur.",solution:"SELECT *\nFROM musteriler\nWHERE isim LIKE 'A%';",explain:"LIKE metin aramalarında kullanılır."},
-
-  {level:"banka",topic:"KPI",tables:["musteriler","hesaplar"],question:"Şehir bazında toplam bakiyeyi hesapla.",must:["select","sehir","sum","bakiye","from","musteriler","join","hesaplar","on","musteri_id","group","by","sehir"],no:[],hint:"Müşteriden şehir, hesaptan bakiye gelir. Şehir bazında grupla.",solution:"SELECT m.sehir, SUM(h.bakiye) AS toplam_bakiye\nFROM musteriler m\nINNER JOIN hesaplar h\nON m.musteri_id = h.musteri_id\nGROUP BY m.sehir;",explain:"Şehir bazlı toplam bakiye önemli bir KPI olabilir."},
-  {level:"banka",topic:"Kanal Analizi",tables:["islemler"],question:"Kanal bazında toplam işlem tutarını bul.",must:["select","kanal","sum","tutar","from","islemler","group","by","kanal"],no:[],hint:"Mobil, ATM, Şube gibi kanalları GROUP BY ile grupla.",solution:"SELECT kanal, SUM(tutar) AS toplam_tutar\nFROM islemler\nGROUP BY kanal;",explain:"Kanal performansı mobil/ATM/şube kullanımını izlemek için analiz edilir."},
-  {level:"banka",topic:"Risk",tables:["krediler"],question:"Aktif kredi toplamını kredi türüne göre getir.",must:["select","kredi_turu","sum","kredi_tutari","from","krediler","where","durum","aktif","group","by","kredi_turu"],no:[],hint:"Önce aktif kredileri WHERE ile filtrele, sonra kredi türüne göre grupla.",solution:"SELECT kredi_turu, SUM(kredi_tutari) AS aktif_kredi_toplami\nFROM krediler\nWHERE durum = 'Aktif'\nGROUP BY kredi_turu;",explain:"Kredi portföyü analizinde aktif risk tutarı kredi türüne göre incelenebilir."},
-  {level:"banka",topic:"Müşteri 360",tables:["musteriler","hesaplar","krediler"],question:"Müşteri bazında toplam bakiye ve toplam kredi tutarını getir.",must:["select","isim","sum","bakiye","sum","kredi_tutari","from","musteriler","join","hesaplar","join","krediler","on","musteri_id","group","by"],no:[],hint:"Müşterileri hem hesaplar hem kredilerle müşteri_id üzerinden bağla.",solution:"SELECT m.isim,\n       SUM(h.bakiye) AS toplam_bakiye,\n       SUM(k.kredi_tutari) AS toplam_kredi\nFROM musteriler m\nINNER JOIN hesaplar h ON m.musteri_id = h.musteri_id\nINNER JOIN krediler k ON m.musteri_id = k.musteri_id\nGROUP BY m.isim;",explain:"Müşteri 360 müşterinin varlık ve borç tarafını birlikte görmeye çalışır."},
-  {level:"banka",topic:"Anomali",tables:["islemler"],question:"1000 TL üzerindeki işlemleri yüksek tutarlı işlem olarak getir.",must:["select","from","islemler","where","tutar",">","1000"],no:[],hint:"WHERE tutar > 1000 kullan.",solution:"SELECT *\nFROM islemler\nWHERE tutar > 1000;",explain:"Basit eşik kontrolleri fraud/risk analizlerinin ilk adımı olabilir."}
-];
-
-let activeLevel = localStorage.getItem("sqlArenaLevel") || "temel";
-let currentQuestion = Number(localStorage.getItem("sqlArenaQuestion")) || 0;
-let score = Number(localStorage.getItem("sqlArenaScore")) || 0;
-let answeredCorrectly = false;
-
-function normalizeSql(sql){
-  return sql.toLowerCase()
-    .replaceAll("ı","i").replaceAll("İ","i").replaceAll("ç","c").replaceAll("ğ","g").replaceAll("ö","o").replaceAll("ş","s").replaceAll("ü","u")
-    .replaceAll(";"," ").replaceAll("("," ").replaceAll(")"," ").replaceAll(","," ").replaceAll("'","").replaceAll('"',"")
-    .split(/\s+/).join(" ").trim();
-}
-function filtered(){ return questions.filter(q=>q.level===activeLevel); }
-function save(){ localStorage.setItem("sqlArenaScore",score); localStorage.setItem("sqlArenaQuestion",currentQuestion); localStorage.setItem("sqlArenaLevel",activeLevel); }
-function renderLevelMenu(){
-  const menu=document.getElementById("levelMenu"); menu.innerHTML="";
-  levels.forEach(l=>{ const b=document.createElement("button"); b.className="level-btn"+(l.id===activeLevel?" active":""); b.textContent=l.name; b.onclick=()=>{activeLevel=l.id; currentQuestion=0; answeredCorrectly=false; save(); renderAll();}; menu.appendChild(b); });
-}
-function renderSchema(tables){
-  const area=document.getElementById("schemaArea"); area.innerHTML="";
-  tables.forEach(t=>{ const c=document.createElement("div"); c.className="schema-card"; c.innerHTML=`<strong>${t}</strong><div class="columns">${schemas[t].join("<br>")}</div>`; area.appendChild(c); });
-}
-function renderSampleTables(tables){
-  const area=document.getElementById("tableArea"); area.innerHTML="";
-  tables.forEach(name=>{ if(!sampleTables[name]) return; const t=sampleTables[name]; let html=`<div style="margin-bottom:18px;"><strong>Tablo adı:</strong> ${name}<table><thead><tr>`; t.columns.forEach(col=>html+=`<th>${col}</th>`); html+="</tr></thead><tbody>"; t.rows.forEach(row=>{html+="<tr>"; row.forEach(cell=>html+=`<td>${cell}</td>`); html+="</tr>";}); html+="</tbody></table></div>"; area.innerHTML+=html; });
-}
-function renderQuestion(){
-  const list=filtered(); if(currentQuestion>=list.length) currentQuestion=0; const q=list[currentQuestion]; const level=levels.find(l=>l.id===activeLevel);
-  answeredCorrectly=false;
-  document.getElementById("questionNumber").textContent=currentQuestion+1;
-  document.getElementById("totalQuestions").textContent=list.length;
-  document.getElementById("score").textContent=score;
-  document.getElementById("levelName").textContent=level.name;
-  document.getElementById("topic").textContent=q.topic;
-  document.getElementById("questionText").textContent=q.question;
-  document.getElementById("userAnswer").value="";
-  document.getElementById("resultBox").innerHTML="Cevabını yazınca sonucu burada göreceksin.";
-  renderSchema(q.tables); renderSampleTables(q.tables);
-}
-function points(level){ return {temel:10,agregasyon:15,join:20,ileri:25,banka:30}[level] || 10; }
-function checkAnswer(){
-  const q=filtered()[currentQuestion]; const sql=normalizeSql(document.getElementById("userAnswer").value); const box=document.getElementById("resultBox");
-  if(!sql){ box.innerHTML='<span class="error">Önce bir SQL sorgusu yazmalısın.</span>'; return; }
-  const missing=q.must.filter(x=>!sql.includes(normalizeSql(x))); const forbidden=q.no.filter(x=>sql.includes(normalizeSql(x)));
-  if(missing.length===0 && forbidden.length===0){
-    box.innerHTML=`<span class="success">Doğru! Bu görev tamamlandı.</span><div class="explanation">${q.explain}</div>`;
-    if(!answeredCorrectly){ score+=points(q.level); answeredCorrectly=true; save(); document.getElementById("score").textContent=score; }
-  } else {
-    let msg='<span class="error">Henüz doğru değil.</span><br>';
-    if(missing.length) msg+=`Eksik olabilecek parçalar: <strong>${missing.join(", ")}</strong><br>`;
-    if(forbidden.length) msg+=`Bu soruda kullanmaman gereken parçalar: <strong>${forbidden.join(", ")}</strong><br>`;
-    msg+='İpucu alıp tekrar deneyebilirsin.'; box.innerHTML=msg;
-  }
-}
-function showHint(){ const q=filtered()[currentQuestion]; document.getElementById("resultBox").innerHTML=`<span class="hint">İpucu:</span> ${q.hint}`; }
-function showSolution(){ const q=filtered()[currentQuestion]; document.getElementById("resultBox").innerHTML=`<span class="info">Örnek çözüm:</span><div class="solution">${q.solution}</div><div class="explanation">${q.explain}</div>`; }
-function nextQuestion(){ const list=filtered(); currentQuestion = currentQuestion < list.length-1 ? currentQuestion+1 : 0; save(); renderQuestion(); }
-function resetProgress(){ score=0; currentQuestion=0; activeLevel="temel"; localStorage.removeItem("sqlArenaScore"); localStorage.removeItem("sqlArenaQuestion"); localStorage.removeItem("sqlArenaLevel"); renderAll(); }
-function renderAll(){ renderLevelMenu(); renderQuestion(); }
-renderAll();
-</script>
 </body>
 </html>
