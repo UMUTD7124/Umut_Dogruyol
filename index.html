@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL Mini Oyun</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #e5e7eb;
+      padding: 14px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      background: #111827;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: #38bdf8;
+      text-align: center;
+      font-size: 30px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      background: #1f2937;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #374151;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .box {
+      background: #1f2937;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 1px solid #374151;
+    }
+
+    .box-title {
+      color: #facc15;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    #questionText {
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    #tableArea {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: #0f172a;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 1px solid #334155;
+      padding: 9px;
+      text-align: left;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #0369a1;
+      color: white;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 135px;
+      background: #020617;
+      color: #a7f3d0;
+      border: 1px solid #475569;
+      border-radius: 12px;
+      padding: 14px;
+      font-family: Consolas, monospace;
+      font-size: 16px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    button {
+      border: none;
+      padding: 14px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+      min-height: 50px;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .check-btn {
+      background: #22c55e;
+      color: #052e16;
+    }
+
+    .hint-btn {
+      background: #facc15;
+      color: #422006;
+    }
+
+    .solution-btn {
+      background: #a78bfa;
+      color: #2e1065;
+    }
+
+    .next-btn {
+      background: #38bdf8;
+      color: #082f49;
+    }
+
+    .result-box {
+      min-height: 78px;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .success {
+      color: #86efac;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #fca5a5;
+      font-weight: bold;
+    }
+
+    .hint {
+      color: #fde68a;
+      font-weight: bold;
+    }
+
+    .solution {
+      background: #020617;
+      color: #93c5fd;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-family: Consolas, monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    .footer-note {
+      color: #94a3b8;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 8px;
+      }
+
+      .container {
+        padding: 14px;
+        border-radius: 14px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+      }
+
+      .top-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .badge {
+        font-size: 14px;
+        padding: 9px;
+      }
+
+      .box {
+        padding: 13px;
+      }
+
+      #questionText {
+        font-size: 16px;
+      }
+
+      textarea {
+        min-height: 150px;
+        font-size: 15px;
+      }
+
+      .buttons {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        font-size: 16px;
+        min-height: 54px;
+      }
+
+      table {
+        min-width: 480px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>SQL Mini Oyun</h1>
+    <p class="subtitle">Soruyu oku, SQL sorgunu yaz, kontrol et ve seviye atla.</p>
+
+    <div class="top-bar">
+      <div class="badge">Soru: <span id="questionNumber">1</span> / <span id="totalQuestions"></span></div>
+      <div class="badge">Puan: <span id="score">0</span></div>
+      <div class="badge">Konu: <span id="topic">SELECT</span></div>
+    </div>
+
+    <div class="box">
+      <div class="box-title">Görev</div>
+      <div id="questionText"></div>
+    </div>
+
+    <div class="box">
+      <div class="box-title">Örnek Tablo</div>
+      <div id="tableArea"></div>
+    </div>
+
+    <div class="box">
+      <div class="box-title">SQL Cevabını Yaz</div>
+      <textarea id="userAnswer" placeholder="Örnek: SELECT isim FROM musteriler;"></textarea>
+
+      <div class="buttons">
+        <button class="check-btn" onclick="checkAnswer()">Kontrol Et</button>
+        <button class="hint-btn" onclick="showHint()">İpucu</button>
+        <button class="solution-btn" onclick="showSolution()">Çözümü Göster</button>
+        <button class="next-btn" onclick="nextQuestion()">Sonraki Soru</button>
+      </div>
+    </div>
+
+    <div class="box result-box" id="resultBox">
+      Cevabını yazınca sonucu burada göreceksin.
+    </div>
+
+    <div class="footer-note">
+      Bu mini oyun gerçek veritabanı çalıştırmaz. Öğrenme amaçlı olarak SQL sorgusunun ana yapısını kontrol eder.
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        topic: "SELECT",
+        question: "musteriler tablosundaki tüm kolonları getir.",
+        table: "musteriler",
+        columns: ["musteri_id", "isim", "sehir", "yas"],
+        rows: [
+          [1, "Ali", "İzmir", 34],
+          [2, "Ayşe", "Ankara", 28],
+          [3, "Mehmet", "İstanbul", 41]
+        ],
+        answers: ["select * from musteriler"],
+        hint: "Tüm kolonları almak için yıldız (*) kullanılır.",
+        solution: "SELECT *\nFROM musteriler;"
+      },
+      {
+        topic: "SELECT",
+        question: "musteriler tablosundan sadece isim kolonunu getir.",
+        table: "musteriler",
+        columns: ["musteri_id", "isim", "sehir", "yas"],
+        rows: [
+          [1, "Ali", "İzmir", 34],
+          [2, "Ayşe", "Ankara", 28],
+          [3, "Mehmet", "İstanbul", 41]
+        ],
+        answers: ["select isim from musteriler"],
+        hint: "SELECT'ten sonra almak istediğin kolon adını yaz.",
+        solution: "SELECT isim\nFROM musteriler;"
+      },
+      {
+        topic: "WHERE",
+        question: "İzmir şehrindeki müşterileri getir.",
+        table: "musteriler",
+        columns: ["musteri_id", "isim", "sehir", "yas"],
+        rows: [
+          [1, "Ali", "İzmir", 34],
+          [2, "Ayşe", "Ankara", 28],
+          [3, "Mehmet", "İstanbul", 41],
+          [4, "Zeynep", "İzmir", 25]
+        ],
+        answers: [
+          "select * from musteriler where sehir = 'izmir'",
+          "select * from musteriler where sehir='izmir'",
+          "select * from musteriler where sehir = \"izmir\""
+        ],
+        hint: "Filtreleme için WHERE kullanılır. Metin değerleri genelde tek tırnak içine alınır.",
+        solution: "SELECT *\nFROM musteriler\nWHERE sehir = 'İzmir';"
+      },
+      {
+        topic: "WHERE",
+        question: "Yaşı 30'dan büyük müşterileri getir.",
+        table: "musteriler",
+        columns: ["musteri_id", "isim", "sehir", "yas"],
+        rows: [
+          [1, "Ali", "İzmir", 34],
+          [2, "Ayşe", "Ankara", 28],
+          [3, "Mehmet", "İstanbul", 41]
+        ],
+        answers: ["select * from musteriler where yas > 30"],
+        hint: "Sayısal karşılaştırmada tırnak kullanmana gerek yok.",
+        solution: "SELECT *\nFROM musteriler\nWHERE yas > 30;"
+      },
+      {
+        topic: "ORDER BY",
+        question: "Müşterileri yaşa göre büyükten küçüğe sırala.",
+        table: "musteriler",
+        columns: ["musteri_id", "isim", "sehir", "yas"],
+        rows: [
+          [1, "Ali", "İzmir", 34],
+          [2, "Ayşe", "Ankara", 28],
+          [3, "Mehmet", "İstanbul", 41]
+        ],
+        answers: ["select * from musteriler order by yas desc"],
+        hint: "Büyükten küçüğe sıralamak için DESC kullanılır.",
+        solution: "SELECT *\nFROM musteriler\nORDER BY yas DESC;"
+      },
+      {
+        topic: "GROUP BY",
+        question: "Her şehirde kaç müşteri olduğunu bul.",
+        table: "musteriler",
+        columns: ["musteri_id", "isim", "sehir", "yas"],
+        rows: [
+          [1, "Ali", "İzmir", 34],
+          [2, "Ayşe", "Ankara", 28],
+          [3, "Mehmet", "İstanbul", 41],
+          [4, "Zeynep", "İzmir", 25]
+        ],
+        answers: [
+          "select sehir, count(*) from musteriler group by sehir",
+          "select sehir,count(*) from musteriler group by sehir"
+        ],
+        hint: "Saymak için COUNT(*), şehir bazında gruplamak için GROUP BY sehir kullan.",
+        solution: "SELECT sehir, COUNT(*)\nFROM musteriler\nGROUP BY sehir;"
+      },
+      {
+        topic: "HAVING",
+        question: "Müşteri sayısı 1'den fazla olan şehirleri getir.",
+        table: "musteriler",
+        columns: ["musteri_id", "isim", "sehir", "yas"],
+        rows: [
+          [1, "Ali", "İzmir", 34],
+          [2, "Ayşe", "Ankara", 28],
+          [3, "Mehmet", "İstanbul", 41],
+          [4, "Zeynep", "İzmir", 25]
+        ],
+        answers: [
+          "select sehir, count(*) from musteriler group by sehir having count(*) > 1",
+          "select sehir,count(*) from musteriler group by sehir having count(*) > 1"
+        ],
+        hint: "GROUP BY sonrası filtreleme yapacaksan WHERE değil HAVING kullanılır.",
+        solution: "SELECT sehir, COUNT(*)\nFROM musteriler\nGROUP BY sehir\nHAVING COUNT(*) > 1;"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let answeredCorrectly = false;
+
+    document.getElementById("totalQuestions").textContent = questions.length;
+
+    function normalizeSql(sql) {
+      return sql
+        .toLowerCase()
+        .replace(/ı/g, "i")
+        .replace(/İ/g, "i")
+        .replace(/ç/g, "c")
+        .replace(/ğ/g, "g")
+        .replace(/ö/g, "o")
+        .replace(/ş/g, "s")
+        .replace(/ü/g, "u")
+        .replace(/;/g, "")
+        .replace(/\s*,\s*/g, ",")
+        .replace(/\s*=\s*/g, " = ")
+        .replace(/\s*>\s*/g, " > ")
+        .replace(/\s+</g, " <")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function renderQuestion() {
+      const q = questions[currentQuestion];
+      answeredCorrectly = false;
+
+      document.getElementById("questionNumber").textContent = currentQuestion + 1;
+      document.getElementById("topic").textContent = q.topic;
+      document.getElementById("questionText").textContent = q.question;
+      document.getElementById("userAnswer").value = "";
+      document.getElementById("resultBox").innerHTML = "Cevabını yazınca sonucu burada göreceksin.";
+
+      let html = `<strong>Tablo adı:</strong> ${q.table}`;
+      html += "<table><thead><tr>";
+
+      q.columns.forEach(col => {
+        html += `<th>${col}</th>`;
+      });
+
+      html += "</tr></thead><tbody>";
+
+      q.rows.forEach(row => {
+        html += "<tr>";
+        row.forEach(cell => {
+          html += `<td>${cell}</td>`;
+        });
+        html += "</tr>";
+      });
+
+      html += "</tbody></table>";
+      document.getElementById("tableArea").innerHTML = html;
+    }
+
+    function checkAnswer() {
+      const q = questions[currentQuestion];
+      const userSql = normalizeSql(document.getElementById("userAnswer").value);
+      const correctAnswers = q.answers.map(answer => normalizeSql(answer));
+      const resultBox = document.getElementById("resultBox");
+
+      if (!userSql) {
+        resultBox.innerHTML = `<span class="error">Önce bir SQL sorgusu yazmalısın.</span>`;
+        return;
+      }
+
+      if (correctAnswers.includes(userSql)) {
+        resultBox.innerHTML = `<span class="success">Doğru! Harika gidiyorsun.</span>`;
+
+        if (!answeredCorrectly) {
+          score += 10;
+          answeredCorrectly = true;
+          document.getElementById("score").textContent = score;
+        }
+      } else {
+        resultBox.innerHTML = `
+          <span class="error">Henüz doğru değil.</span><br>
+          Küçük bir yazım farkı, eksik SELECT / FROM / WHERE olabilir. İpucu alıp tekrar dene.
+        `;
+      }
+    }
+
+    function showHint() {
+      const q = questions[currentQuestion];
+      document.getElementById("resultBox").innerHTML = `<span class="hint">İpucu:</span> ${q.hint}`;
+    }
+
+    function showSolution() {
+      const q = questions[currentQuestion];
+      document.getElementById("resultBox").innerHTML = `
+        Örnek çözüm:
+        <div class="solution">${q.solution}</div>
+      `;
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+      } else {
+        document.getElementById("resultBox").innerHTML = `
+          <span class="success">Oyun bitti!</span><br>
+          Toplam puanın: <strong>${score}</strong><br>
+          İstersen bu dosyaya yeni sorular ekleyerek oyunu büyütebilirsin.
+        `;
+      }
+    }
+
+    renderQuestion();
+  </script>
+</body>
+</html>
